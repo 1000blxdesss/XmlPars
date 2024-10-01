@@ -1,0 +1,37 @@
+<?xml version='1.0' encoding='utf-8'?>
+
+<library>
+    <book id="1">
+        <title>Foundation</title>
+        <author>George Orwell</author>
+        <year>2016</year>
+        <genre>History</genre>
+        <price currency="GBP">91.93</price>
+        <language>English</language>
+    </book>
+    <book id="2">
+        <title>Effective Java</title>
+        <author>Robert C. Martin</author>
+        <year>2017</year>
+        <genre>Science</genre>
+        <price currency="USD">58.28</price>
+        <format>Ebook</format>
+        <reviews>
+            <review>
+            <user>charlie</user>
+            <rating>3</rating>
+            <comment>Loved the examples.</comment>
+        </review>
+        <review>
+            <user>eve</user>
+            <rating>2</rating>
+            <comment>Could be better.</comment>
+        </review>
+        </reviews>
+        <language>English</language>
+        <awards>
+            <award>Critics' Choice</award>
+            <award>Book of the Year</award>
+        </awards>
+    </book>
+</library>
