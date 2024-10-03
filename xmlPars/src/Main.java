@@ -1,73 +1,178 @@
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.Collections;
+import java.util.List;
 import java.util.regex.Pattern;
 
 import static java.lang.System.out;
+class Lib {
+    static class Book {
 
-class Book {
-    private String id;
-    private String title;
-    private String author;
-    private String year;
-    private String genre;
-    private String price;
-    private String language;
-    //private String currency;
-    public Book(String id, String title, String author, String year, String genre, String price, String language) {
-        this.id = id;
-        this.title = title;
-        this.author = author;
-        this.year = year;
-        this.genre = genre;
-        this.price = price;
-        this.language = language;
 
-        //this.currency = currency;
+        private String id;
+        private String title;
+        private String author;
+        private String year;
+        private String genre;
+        private String price;
+        private String language;
+        //private String currency;
+
+        private List<Reviews> reviews;
+
+        private List<String> awards;
+
+
+        public Book(String id, String title, String author, String year, String genre, String price, String language, List<String> awards) {
+            this.id = id;
+            this.title = title;
+            this.author = author;
+            this.year = year;
+            this.genre = genre;
+            this.price = price;
+            this.language = language;
+            this.awards = awards;
+
+            //this.currency = currency;
+        }
+
+        public Book() {
+        }
+
+
+        public String getId() {
+            return id;
+        }
+
+        public void setAwards(List<String> awards) {
+            this.awards = awards;
+        }
+
+        public List<String> getAwards() {
+            return awards;
+        }
+
+
+        public void setId(String id) {
+            this.id = id;
+        }
+
+        public String getTitle() {
+            return title;
+        }
+
+        public void setTitle(String title) {
+            this.title = title;
+        }
+
+        public String getAuthor() {
+            return author;
+        }
+
+        public void setAuthor(String author) {
+            this.author = author;
+        }
+
+        public String getYear() {
+            return year;
+        }
+
+        public void setYear(String year) {
+            this.year = year;
+        }
+
+        public String getGenre() {
+            return genre;
+        }
+
+        public void setGenre(String genre) {
+            this.genre = genre;
+        }
+
+        public String getPrice() {
+            return price;
+        }
+
+        public void setPrice(String price) {
+            this.price = price;
+        }
+
+        public String getLanguage() {
+            return language;
+        }
+
+        public void setLanguage(String language) {
+            this.language = language;
+        }
+
+        @Override
+        public String toString() {
+            return "Book id:" + id + '\n' +
+                    '\t' + "Title:" + title + '\n' +
+                    '\t' + "Author:" + author + '\n' +
+                    '\t' + "Year:" + year + '\n' +
+                    '\t' + "Genre:" + genre + '\n' +
+                    '\t' + "Price:" + price + '\n' +
+                    '\t' + "Language:" + language + '\n' +
+                    '\t' + "Award:" + awards + '\n'
+                    ;
+        }
     }
 
-    @Override
-    public String toString(){
-        return "Book id:"+id+'\n' +'\t'+"Title:"+title +'\n' +'\t'+"Author:"+author +'\n' +'\t'+"Year:"+year +'\n' +'\t'+"Genre:"+genre +'\n' +'\t'+"Price:"+price +'\n' +'\t'+"Language:"+language +'\n';
-    }
-}
+    static class Reviews  {
+        public Reviews() {
 
-class Reviews  {//extends Book
-    private String user;
-    private String rating;
-    private String comment;
+        }//extends Book
 
-    public Reviews(String user, String rating, String comment) {
-        this.user = user;
-        this.rating = rating;
-        this.comment = comment;
-    }
+        public String getUser() {
+            return user;
+        }
+
+        public void setUser(String user) {
+            this.user = user;
+        }
+
+        public String getRating() {
+            return rating;
+        }
+
+        public void setRating(String rating) {
+            this.rating = rating;
+        }
+
+        public String getComment() {
+            return comment;
+        }
+
+        public void setComment(String comment) {
+            this.comment = comment;
+        }
+
+        private String user;
+        private String rating;
+        private String comment;
+
+        public Reviews(String user, String rating, String comment) {
+            this.user = user;
+            this.rating = rating;
+            this.comment = comment;
+        }
 
 //    public Reviews(String id, String title, String author, String year, String genre, String price, String language, String currency) {
 //        super(id, title, author, year, genre, price, language, currency);
 //    }
 
-    @Override
-    public String toString(){
-        return "user:"+user+'\n'+"rating:"+rating+'\n'+"comment:"+comment+'\n';
+        @Override
+        public String toString(){
+            return "user:"+user+'\n'+"rating:"+rating+'\n'+"comment:"+comment+'\n';
+        }
     }
+
 }
 
-class Awards  { //extends Reviews
-    private String award;
 
-    public Awards(String award) {
-        this.award = award;
-    }
 
-//    public Awards(String id, String title, String author, String year, String genre, String price, String language, String currency) {
-//        super(id, title, author, year, genre, price, language, currency);
-//    }
-    @Override
-    public String toString(){
-        return "award:"+award+'\n';
-    }
-}
 public class Main {
 
     /**
@@ -78,8 +183,21 @@ public class Main {
         //Pattern pattern = Pattern.compile(">(.*?)</");
         //Matcher matcher = pattern.matcher();
         BufferedReader reader = new BufferedReader(new FileReader(path));
-        String line,id = "",title = "",author = "",year = "",genre = "",price = "",language = "",user = "",rating = "",comment = "",award = "";
 
+        String line;
+//                id = book2.getId(),
+//                title = book2.getTitle(),
+//                author = book2.getAuthor(),
+//                year = book2.getYear(),
+//                genre = book2.getGenre(),
+//                price = book2.getPrice(),
+//                language = book2.getLanguage(),
+//
+//
+//
+//
+        Lib.Book book2 = new Lib.Book();
+        Lib.Reviews reviews = new Lib.Reviews();
 //        while ((line = reader.readLine()) != null) {
 //            String temp = line;
 //            id = line.contains("id") ? temp.replace("<book id=","").replace(">","") : id; //Pattern.compile("<id>(.*?)</id>").matcher(line)
@@ -120,35 +238,33 @@ public class Main {
         while ((line = reader.readLine()) != null) {
             if (line.contains("<book id=")) {
 
-                id = line.replaceAll("<book id=\"", "").replaceAll("\">", "");
+                book2.setId(line.replaceAll("<book id=\"", "").replaceAll("\">", ""));
             } else if (line.contains("<title>")) {
-                title = line.replaceAll("<title>", "").replaceAll("</title>", "");
+                book2.setTitle(line.replaceAll("<title>", "").replaceAll("</title>", ""));
             } else if (line.contains("<author>")) {
-                author = line.replaceAll("<author>", "").replaceAll("</author>", "");
+                book2.setAuthor(line.replaceAll("<author>", "").replaceAll("</author>", ""));
             } else if (line.contains("<year>")) {
-                year = line.replaceAll("<year>", "").replaceAll("</year>", "");
+                book2.setYear(line.replaceAll("<year>", "").replaceAll("</year>", ""));
             } else if (line.contains("<genre>")) {
-                genre = line.replaceAll("<genre>", "").replaceAll("</genre>", "");
+                book2.setGenre(line.replaceAll("<genre>", "").replaceAll("</genre>", ""));
             } else if (line.contains("<price currency=")) {
-                price = line.replaceAll("<price currency=\"[^\"]*\">", "").replaceAll("</price>", "");
+                book2.setPrice(line.replaceAll("<price currency=\"[^\"]*\">", "").replaceAll("</price>", ""));
             } else if (line.contains("<language>")) {
-                language = line.replaceAll("<language>", "").replaceAll("</language>", "");
+                book2.setLanguage(line.replaceAll("<language>", "").replaceAll("</language>", ""));
             } else if (line.contains("<user>")) {
-                user = line.replaceAll("<user>", "").replaceAll("</user>", "");
+                reviews.setUser(line.replaceAll("<user>", "").replaceAll("</user>", ""));
             } else if (line.contains("<rating>")) {
-                rating = line.replaceAll("<rating>", "").replaceAll("</rating>", "");
+                reviews.setRating(line.replaceAll("<rating>", "").replaceAll("</rating>", ""));
             } else if (line.contains("<comment>")) {
-                comment = line.replaceAll("<comment>", "").replaceAll("</comment>", "");
+                reviews.setComment(line.replaceAll("<comment>", "").replaceAll("</comment>", ""));
             } else if (line.contains("<award>")) {
-                award = line.replaceAll("<award>", "").replaceAll("</award>", "");
+                 book2.setAwards(Collections.singletonList(line.replaceAll("<award>", "").replaceAll("</award>", "")));
             } else if (line.contains("</book>")) {
-                Book book = new Book(id, title, author, year, genre, price, language);
-                Reviews reviews = new Reviews(user, rating, comment);
-                Awards awards = new Awards(award);
 
-                out.println(book);
-                if (!user.isEmpty()) out.println(reviews);
-                if (!award.isEmpty()) out.println(awards);
+
+                out.println(book2);
+               out.println(reviews);
+               // if (!user.isEmpty()) out.println(reviews);
 
 
             }
