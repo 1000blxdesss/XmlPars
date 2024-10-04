@@ -1,14 +1,13 @@
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.regex.Pattern;
 
 import static java.lang.System.out;
 class Lib {
     static class Book {
-
 
         private String id;
         private String title;
@@ -17,29 +16,35 @@ class Lib {
         private String genre;
         private String price;
         private String language;
-        //private String currency;
 
         private List<Reviews> reviews;
 
+        public List<Reviews> getReviews() {
+            return reviews;
+        }
+
+        ;;;
+        public void addReviewUser(String user) {
+            if (this.reviews == null) {
+                this.reviews = new ArrayList<>();
+                this.reviews.add(new Reviews());
+            }
+            this.reviews.get(this.reviews.size() - 1).setUser(user);
+        }
+
+        public void addReviewRating(String rating) {
+            if (this.reviews != null) {
+                this.reviews.get(this.reviews.size() - 1).setRating(rating);
+            }
+        }
+
+        public void addReviewComment(String comment) {
+            if (this.reviews != null) {
+                this.reviews.get(this.reviews.size() - 1).setComment(comment);
+            }
+        }
+        ;;;
         private List<String> awards;
-
-
-        public Book(String id, String title, String author, String year, String genre, String price, String language, List<String> awards) {
-            this.id = id;
-            this.title = title;
-            this.author = author;
-            this.year = year;
-            this.genre = genre;
-            this.price = price;
-            this.language = language;
-            this.awards = awards;
-
-            //this.currency = currency;
-        }
-
-        public Book() {
-        }
-
 
         public String getId() {
             return id;
@@ -115,22 +120,20 @@ class Lib {
                     '\t' + "Genre:" + genre + '\n' +
                     '\t' + "Price:" + price + '\n' +
                     '\t' + "Language:" + language + '\n' +
-                    '\t' + "Award:" + awards + '\n'
+                    '\t' + "Award:" + awards + '\n' +
+                    '\t' + "Reviews:" + reviews + '\n'
                     ;
         }
     }
 
     static class Reviews  {
-        public Reviews() {
-
-        }//extends Book
 
         public String getUser() {
             return user;
         }
-
-        public void setUser(String user) {
+        public List<Reviews> setUser(String user) {
             this.user = user;
+            return null;
         }
 
         public String getRating() {
@@ -148,20 +151,9 @@ class Lib {
         public void setComment(String comment) {
             this.comment = comment;
         }
-
         private String user;
         private String rating;
         private String comment;
-
-        public Reviews(String user, String rating, String comment) {
-            this.user = user;
-            this.rating = rating;
-            this.comment = comment;
-        }
-
-//    public Reviews(String id, String title, String author, String year, String genre, String price, String language, String currency) {
-//        super(id, title, author, year, genre, price, language, currency);
-//    }
 
         @Override
         public String toString(){
@@ -180,24 +172,10 @@ public class Main {
      */
 
     public static String info(String path) throws IOException{
-        //Pattern pattern = Pattern.compile(">(.*?)</");
-        //Matcher matcher = pattern.matcher();
         BufferedReader reader = new BufferedReader(new FileReader(path));
 
         String line;
-//                id = book2.getId(),
-//                title = book2.getTitle(),
-//                author = book2.getAuthor(),
-//                year = book2.getYear(),
-//                genre = book2.getGenre(),
-//                price = book2.getPrice(),
-//                language = book2.getLanguage(),
-//
-//
-//
-//
         Lib.Book book2 = new Lib.Book();
-        Lib.Reviews reviews = new Lib.Reviews();
 //        while ((line = reader.readLine()) != null) {
 //            String temp = line;
 //            id = line.contains("id") ? temp.replace("<book id=","").replace(">","") : id; //Pattern.compile("<id>(.*?)</id>").matcher(line)
@@ -225,19 +203,8 @@ public class Main {
 //            }
 //        }
 
-
-            //currency = line.contains("currency") ? line.replace("<price currency=","").replace("</price>","") : currency;
-//            Book book = new Book(id,title,author,year,genre,price,language,currency);
-//            out.println(book);
-//           String results = switch (line) {
-//               case "<library>" ->  line;
-//               default -> "";
-//           };
-//            out.println(results);
-
         while ((line = reader.readLine()) != null) {
             if (line.contains("<book id=")) {
-
                 book2.setId(line.replaceAll("<book id=\"", "").replaceAll("\">", ""));
             } else if (line.contains("<title>")) {
                 book2.setTitle(line.replaceAll("<title>", "").replaceAll("</title>", ""));
@@ -252,26 +219,18 @@ public class Main {
             } else if (line.contains("<language>")) {
                 book2.setLanguage(line.replaceAll("<language>", "").replaceAll("</language>", ""));
             } else if (line.contains("<user>")) {
-                reviews.setUser(line.replaceAll("<user>", "").replaceAll("</user>", ""));
+                book2.addReviewUser(line.replaceAll("<user>", "").replaceAll("</user>", ""));
             } else if (line.contains("<rating>")) {
-                reviews.setRating(line.replaceAll("<rating>", "").replaceAll("</rating>", ""));
+                book2.addReviewRating(line.replaceAll("<rating>", "").replaceAll("</rating>", ""));
             } else if (line.contains("<comment>")) {
-                reviews.setComment(line.replaceAll("<comment>", "").replaceAll("</comment>", ""));
+                book2.addReviewComment(line.replaceAll("<comment>", "").replaceAll("</comment>", ""));
             } else if (line.contains("<award>")) {
                  book2.setAwards(Collections.singletonList(line.replaceAll("<award>", "").replaceAll("</award>", "")));
             } else if (line.contains("</book>")) {
-
-
                 out.println(book2);
-               out.println(reviews);
-               // if (!user.isEmpty()) out.println(reviews);
-
 
             }
         }
-
-
-
         reader.close();
     return "+";
     }
@@ -281,25 +240,3 @@ public class Main {
 
     }
 }
-//<!DOCTYPE library [
-//<!ELEMENT library (book)*>
-//<!ELEMENT book (title|author|year|genre|price|language|format|reviews|awards)*>
-//<!ATTLIST book
-//        id CDATA #REQUIRED>
-//<!ELEMENT title (#PCDATA)>
-//<!ELEMENT author (#PCDATA)>
-//<!ELEMENT year (#PCDATA)>
-//<!ELEMENT genre (#PCDATA)>
-//<!ELEMENT price (#PCDATA)>
-//<!ATTLIST price
-//        currency CDATA #REQUIRED>
-//<!ELEMENT language (#PCDATA)>
-//<!ELEMENT format (#PCDATA)>
-//<!ELEMENT reviews (review)*>
-//<!ELEMENT review (user|rating|comment)*>
-//<!ELEMENT user (#PCDATA)>
-//<!ELEMENT rating (#PCDATA)>
-//<!ELEMENT comment (#PCDATA)>
-//<!ELEMENT awards (award)*>
-//<!ELEMENT award (#PCDATA)>
-//]>
