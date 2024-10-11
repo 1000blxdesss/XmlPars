@@ -2,10 +2,10 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import static java.lang.System.out;
+
 class Lib {
     static class Book {
 
@@ -17,47 +17,41 @@ class Lib {
         private String price;
         private String language;
 
-        private List<Reviews> reviews;
+        private List<Reviews> reviews = new ArrayList<>();
+        private List<String> awards = new ArrayList<>();
 
         public List<Reviews> getReviews() {
             return reviews;
         }
 
-        ;;;
         public void addReviewUser(String user) {
-            if (this.reviews == null) {
-                this.reviews = new ArrayList<>();
-                this.reviews.add(new Reviews());
-            }
+            this.reviews.add(new Reviews());
             this.reviews.get(this.reviews.size() - 1).setUser(user);
         }
 
         public void addReviewRating(String rating) {
-            if (this.reviews != null) {
+            if (!this.reviews.isEmpty()) {
                 this.reviews.get(this.reviews.size() - 1).setRating(rating);
             }
         }
 
         public void addReviewComment(String comment) {
-            if (this.reviews != null) {
+            if (!this.reviews.isEmpty()) {
                 this.reviews.get(this.reviews.size() - 1).setComment(comment);
             }
         }
-        ;;;
-        private List<String> awards;
 
-        public String getId() {
-            return id;
-        }
-
-        public void setAwards(List<String> awards) {
-            this.awards = awards;
+        public void addAward(String award) {
+            this.awards.add(award);
         }
 
         public List<String> getAwards() {
             return awards;
         }
 
+        public String getId() {
+            return id;
+        }
 
         public void setId(String id) {
             this.id = id;
@@ -120,20 +114,23 @@ class Lib {
                     '\t' + "Genre:" + genre + '\n' +
                     '\t' + "Price:" + price + '\n' +
                     '\t' + "Language:" + language + '\n' +
-                    '\t' + "Award:" + awards + '\n' +
-                    '\t' + "Reviews:" + reviews + '\n'
-                    ;
+                    '\t' + "Awards:" + awards + '\n' +
+                    '\t' + "Reviews:" + reviews + '\n';
         }
     }
 
-    static class Reviews  {
+    static class Reviews {
+
+        private String user;
+        private String rating;
+        private String comment;
 
         public String getUser() {
             return user;
         }
-        public List<Reviews> setUser(String user) {
+
+        public void setUser(String user) {
             this.user = user;
-            return null;
         }
 
         public String getRating() {
@@ -151,57 +148,23 @@ class Lib {
         public void setComment(String comment) {
             this.comment = comment;
         }
-        private String user;
-        private String rating;
-        private String comment;
 
         @Override
-        public String toString(){
-            return "user:"+user+'\n'+"rating:"+rating+'\n'+"comment:"+comment+'\n';
+        public String toString() {
+            return "user:" + user + '\n' +
+                    "rating:" + rating + '\n' +
+                    "comment:" + comment + '\n';
         }
     }
-
 }
-
-
 
 public class Main {
 
-    /**
-     * BOOK SECTION
-     */
-
-    public static String info(String path) throws IOException{
+    public static String info(String path) throws IOException {
         BufferedReader reader = new BufferedReader(new FileReader(path));
-
         String line;
         Lib.Book book2 = new Lib.Book();
-//        while ((line = reader.readLine()) != null) {
-//            String temp = line;
-//            id = line.contains("id") ? temp.replace("<book id=","").replace(">","") : id; //Pattern.compile("<id>(.*?)</id>").matcher(line)
-//            title = line.contains("title") ? temp.replace("<title>","").replace("</title>","") : title;
-//            author = line.contains("author") ? temp.replace("<author>","").replace("</author>","") : author;
-//            year = line.contains("year") ? temp.replace("<year>","").replace("</year>","") : year;
-//            genre = line.contains("genre") ? temp.replace("<genre>","").replace("</genre>","") : genre;
-//            price = line.contains("price") ? temp.replace("<price currency=","").replace("</price>","") : price;
-//            language = line.contains("language") ? temp.replace("<language>","").replace("</language>","") : language;
-//            //*\\
-//            ;; user = line.contains("user") ? temp.replace("<user>","").replace("</user>","") : user;
-//            ;; rating = line.contains("rating") ? temp.replace("<rating>","").replace("</rating>","") : rating;
-//            ;; comment = line.contains("comment") ? temp.replace("<comment>","").replace("</comment>","") : comment;
-//            ;; award = line.contains("award") ? temp.replace("<award>","").replace("</award>","") : award;
-//            if (line.contains("</book>")) {
-//                if (!id.isEmpty()) {
-//                    Book book = new Book(id,title,author,year,genre,price,language);
-//                    Reviews Reviews = new Reviews(user,rating,comment);
-//                    Awards awards = new Awards(award);
-//                    out.println(book);
-//
-//                    if (!user.isEmpty())out.println(Reviews);
-//                    if (!award.isEmpty())out.println(awards);
-//                }
-//            }
-//        }
+        boolean inReview = false;
 
         while ((line = reader.readLine()) != null) {
             if (line.contains("<book id=")) {
@@ -218,25 +181,29 @@ public class Main {
                 book2.setPrice(line.replaceAll("<price currency=\"[^\"]*\">", "").replaceAll("</price>", ""));
             } else if (line.contains("<language>")) {
                 book2.setLanguage(line.replaceAll("<language>", "").replaceAll("</language>", ""));
-            } else if (line.contains("<user>")) {
-                book2.addReviewUser(line.replaceAll("<user>", "").replaceAll("</user>", ""));
-            } else if (line.contains("<rating>")) {
-                book2.addReviewRating(line.replaceAll("<rating>", "").replaceAll("</rating>", ""));
-            } else if (line.contains("<comment>")) {
-                book2.addReviewComment(line.replaceAll("<comment>", "").replaceAll("</comment>", ""));
             } else if (line.contains("<award>")) {
-                 book2.setAwards(Collections.singletonList(line.replaceAll("<award>", "").replaceAll("</award>", "")));
+                book2.addAward(line.replaceAll("<award>", "").replaceAll("</award>", ""));
+            } else if (line.contains("<reviews>")) {
+                inReview = true;
+            } else if (line.contains("</reviews>")) {
+                inReview = false;
+            } else if (inReview) {
+                if (line.contains("<user>")) {
+                    book2.addReviewUser(line.replaceAll("<user>", "").replaceAll("</user>", ""));
+                } else if (line.contains("<rating>")) {
+                    book2.addReviewRating(line.replaceAll("<rating>", "").replaceAll("</rating>", ""));
+                } else if (line.contains("<comment>")) {
+                    book2.addReviewComment(line.replaceAll("<comment>", "").replaceAll("</comment>", ""));
+                }
             } else if (line.contains("</book>")) {
                 out.println(book2);
-
             }
         }
         reader.close();
-    return "+";
+        return "+";
     }
 
     public static void main(String[] args) throws IOException {
         out.println(info("random_structure_29.xml"));
-
     }
 }
